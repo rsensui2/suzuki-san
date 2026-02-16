@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNS One-Stop Platform — カワイイ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-cream: #fff9f5;
+      --color-pink: #ffb5c2;
+      --color-mint: #a8e6cf;
+      --color-lavender: #d4a5ff;
+      --color-coral: #ff8b7b;
+      --color-text: #5a4a6a;
+      --color-dark: #3d2f4a;
+      --radius: 24px;
+      --radius-sm: 16px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      background: var(--color-cream);
+      color: var(--color-text);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+    
+    /* Decorative blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 400px; height: 400px; background: var(--color-pink); top: -100px; right: -100px; }
+    .blob-2 { width: 300px; height: 300px; background: var(--color-mint); bottom: 20%; left: -80px; }
+    .blob-3 { width: 250px; height: 250px; background: var(--color-lavender); bottom: -50px; right: 20%; }
+    
+    /* Header */
+    header {
+      padding: 60px 0 100px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, var(--color-pink), var(--color-lavender));
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 50px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 15px rgba(255, 181, 194, 0.4);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--color-dark);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--color-coral), var(--color-lavender));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .sub {
+      font-size: 1.1rem;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+    
+    /* Section */
+    section {
+      padding: 80px 0;
+      position: relative;
+      z-index: 1;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-title .label {
+      font-size: 0.85rem;
+      color: var(--color-lavender);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .section-title h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--color-dark);
+    }
+    
+    /* Feature cards */
+    .feature-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .feature-cards { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      box-shadow: 0 8px 32px rgba(90, 74, 106, 0.08);
+      border: 2px solid rgba(255, 181, 194, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(90, 74, 106, 0.12);
+    }
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .card:nth-child(1) .card-icon { background: linear-gradient(135deg, #ffb5c2, #ffd4a3); }
+    .card:nth-child(2) .card-icon { background: linear-gradient(135deg, #a8e6cf, #88d4ab); }
+    .card:nth-child(3) .card-icon { background: linear-gradient(135deg, #d4a5ff, #b8d4ff); }
+    .card h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-dark);
+      margin-bottom: 12px;
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: var(--color-text);
+      line-height: 1.7;
+    }
+    
+    /* Concept */
+    .concept-box {
+      background: white;
+      border-radius: var(--radius);
+      padding: 48px;
+      box-shadow: 0 8px 32px rgba(90, 74, 106, 0.08);
+      border: 2px dashed rgba(212, 165, 255, 0.5);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .concept-box p {
+      font-size: 1rem;
+      color: var(--color-text);
+    }
+    
+    /* Effect list */
+    .effect-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    @media (max-width: 500px) {
+      .effect-list { grid-template-columns: 1fr; }
+    }
+    .effect-item {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 20px rgba(90, 74, 106, 0.06);
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    .effect-item:hover { border-color: var(--color-mint); }
+    .effect-item .emoji { font-size: 1.5rem; }
+    .effect-item strong {
+      color: var(--color-dark);
+      font-size: 0.95rem;
+    }
+    
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 100px 0 120px;
+    }
+    .cta-section h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--color-dark);
+      margin-bottom: 16px;
+    }
+    .cta-section p {
+      margin-bottom: 40px;
+      color: var(--color-text);
+    }
+    .btn {
+      display: inline-block;
+      padding: 18px 56px;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(135deg, var(--color-coral), var(--color-lavender));
+      border-radius: 50px;
+      box-shadow: 0 8px 24px rgba(255, 139, 123, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 32px rgba(255, 139, 123, 0.5);
+    }
+    
+    /* Footer */
+    footer {
+      padding: 32px 0;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--color-text);
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <header>
+    <div class="container">
+      <span class="badge">✨ 新規事業</span>
+      <div class="hero">
+        <h1>SNS運用、<br><span>もっとラクに楽しく！</span></h1>
+        <p class="sub">文章・画像・投稿がひとつにまとまっちゃう</p>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <p class="label">CONCEPT</p>
+        <h2>ツールを切り替えるの、もうやめよう</h2>
+      </div>
+      <div class="concept-box">
+        <p>文章作成、画像編集、各SNSへの投稿…バラバラのツールでやってたら、どれだけ時間かかってる？ 全部ひとつにまとめて、あなたの時間を大切に。アイデアから投稿完了まで、スムーズに進めちゃおう！</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <p class="label">FEATURES</p>
+        <h2>3つの嬉しい機能</h2>
+      </div>
+      <div class="feature-cards">
+        <div class="card">
+          <div class="card-icon">✍️</div>
+          <h3>文章の自動生成</h3>
+          <p>AIがキャッチコピーやハッシュタグを考えてくれる！ Instagram、TikTok、Xそれぞれに合わせて最適化してくれるから安心。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🖼️</div>
+          <h3>画像の補正</h3>
+          <p>1枚の画像を各SNSのサイズに自動変換。リサイズやフィルターもワンクリックで、めっちゃ時短！</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📤</div>
+          <h3>投稿の一元化</h3>
+          <p>予約投稿も同時投稿も、全部ここから。複数アカウントの管理もラクラク。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-title">
+        <p class="label">EFFECT</p>
+        <h2>こんなに変わる！</h2>
+      </div>
+      <div class="effect-list">
+        <div class="effect-item">
+          <span class="emoji">⏱️</span>
+          <strong>準備時間50〜70%削減</strong>
+        </div>
+        <div class="effect-item">
+          <span class="emoji">✨</span>
+          <strong>品質が安定する</strong>
+        </div>
+        <div class="effect-item">
+          <span class="emoji">📱</span>
+          <strong>複数SNSを一括管理</strong>
+        </div>
+        <div class="effect-item">
+          <span class="emoji">🚀</span>
+          <strong>少人数でも継続できる</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>さっそく始めよう！</h2>
+      <p>個人クリエイターも、企業も。みんなのSNS運用を応援します。</p>
+      <a href="#" class="btn">お問い合わせはこちら</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">© SNS One-Stop Platform</div>
+  </footer>
+</body>
+</html>

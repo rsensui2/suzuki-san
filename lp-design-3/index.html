@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNS One-Stop Platform — ビジネス</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-navy: #0f172a;
+      --color-navy-light: #1e293b;
+      --color-slate: #475569;
+      --color-slate-light: #64748b;
+      --color-white: #ffffff;
+      --color-bg: #f8fafc;
+      --color-accent: #2563eb;
+      --color-accent-hover: #1d4ed8;
+      --color-border: #e2e8f0;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-navy);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    
+    /* Header */
+    header {
+      background: var(--color-navy);
+      color: var(--color-white);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .header-nav a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-left: 32px;
+    }
+    .header-nav a:hover { color: white; }
+    
+    /* Hero */
+    .hero {
+      background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-navy-light) 100%);
+      color: var(--color-white);
+      padding: 80px 0 100px;
+      text-align: center;
+    }
+    .hero .label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--color-accent);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+    .hero .sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 480px;
+      margin: 0 auto 40px;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 32px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: white;
+      background: var(--color-accent);
+      border-radius: 8px;
+      transition: background 0.2s ease;
+    }
+    .btn-primary:hover { background: var(--color-accent-hover); }
+    
+    /* Section */
+    section { padding: 80px 0; }
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .section-header .label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+    }
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-navy);
+    }
+    
+    /* Problem / Solution */
+    .problem-solution {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .problem-solution { grid-template-columns: 1fr; }
+    }
+    .ps-block {
+      background: var(--color-white);
+      border-radius: 12px;
+      padding: 32px;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .ps-block h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ps-block.problem h3 { color: #dc2626; }
+    .ps-block.solution h3 { color: var(--color-accent); }
+    .ps-block ul {
+      list-style: none;
+      font-size: 0.9375rem;
+      color: var(--color-slate);
+    }
+    .ps-block li {
+      padding: 8px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+    .ps-block li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+    }
+    .ps-block.problem li::before { color: #dc2626; }
+    .ps-block.solution li::before { color: var(--color-accent); }
+    
+    /* Features - Table style */
+    .features-table {
+      background: var(--color-white);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .feature-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 2fr;
+      gap: 24px;
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--color-border);
+      align-items: center;
+    }
+    .feature-row:last-child { border-bottom: none; }
+    @media (max-width: 640px) {
+      .feature-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+    .feature-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      background: rgba(37, 99, 235, 0.1);
+      padding: 6px 12px;
+      border-radius: 6px;
+      width: fit-content;
+    }
+    .feature-row h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-navy);
+    }
+    .feature-row p {
+      font-size: 0.9375rem;
+      color: var(--color-slate);
+      line-height: 1.6;
+    }
+    
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 640px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-item {
+      background: var(--color-white);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      border: 1px solid var(--color-border);
+    }
+    .stat-item .value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      margin-bottom: 4px;
+    }
+    .stat-item .label {
+      font-size: 0.8125rem;
+      color: var(--color-slate);
+    }
+    
+    /* CTA */
+    .cta-section {
+      background: var(--color-navy);
+      color: var(--color-white);
+      padding: 80px 0;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .cta-section p {
+      margin-bottom: 32px;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9375rem;
+    }
+    .btn-white {
+      display: inline-block;
+      padding: 14px 32px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--color-navy);
+      background: var(--color-white);
+      border-radius: 8px;
+      transition: opacity 0.2s ease;
+    }
+    .btn-white:hover { opacity: 0.95; }
+    
+    /* Footer */
+    footer {
+      padding: 24px 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--color-slate-light);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-inner">
+        <div class="logo">SNS One-Stop Platform</div>
+        <nav class="header-nav">
+          <a href="#features">機能</a>
+          <a href="#effect">効果</a>
+          <a href="#contact">お問い合わせ</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <p class="label">ワンストップSNS運用プラットフォーム</p>
+      <h1>SNS運用のすべてを、<br>ひとつの場所で。</h1>
+      <p class="sub">文章作成・画像補正・投稿業務を統合し、業務効率化と成果向上を実現</p>
+      <a href="#contact" class="btn-primary">資料請求・お問い合わせ</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <p class="label">BACKGROUND</p>
+        <h2>課題と解決策</h2>
+      </div>
+      <div class="problem-solution">
+        <div class="ps-block problem">
+          <h3>現状の課題</h3>
+          <ul>
+            <li>作業の分散とツール切り替えによる非効率</li>
+            <li>複数プラットフォームへの投稿に手間</li>
+            <li>クリエイティブの質と量の両立が困難</li>
+            <li>属人化とスケールの限界</li>
+          </ul>
+        </div>
+        <div class="ps-block solution">
+          <h3>本プラットフォームの解決策</h3>
+          <ul>
+            <li>3機能の統合によるワンストップ運用</li>
+            <li>AIによる文章・画像の自動最適化</li>
+            <li>予約投稿・同時投稿の一元管理</li>
+            <li>少人数でも継続可能な運用体制</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <div class="section-header">
+        <p class="label">FEATURES</p>
+        <h2>3つのコア機能</h2>
+      </div>
+      <div class="features-table">
+        <div class="feature-row">
+          <span class="feature-num">01</span>
+          <h3>文章の自動生成</h3>
+          <p>AIを活用し、テーマ・キーワードからキャッチコピー、本文、ハッシュタグを自動生成。Instagram、TikTok、Xそれぞれの形式に最適化。</p>
+        </div>
+        <div class="feature-row">
+          <span class="feature-num">02</span>
+          <h3>画像の補正</h3>
+          <p>アップロードした画像を各SNSの推奨サイズ・形式に最適化。リサイズ、補正、フィルター適用を自動化し、1枚から複数プラットフォーム向けに出力。</p>
+        </div>
+        <div class="feature-row">
+          <span class="feature-num">03</span>
+          <h3>投稿業務の一元化</h3>
+          <p>複数SNSへの予約投稿・同時投稿を一画面から実行。週次・月次のスケジュール管理、複数アカウントの一括管理が可能。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="effect">
+    <div class="container">
+      <div class="section-header">
+        <p class="label">EFFECT</p>
+        <h2>期待される効果</h2>
+      </div>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="value">50-70%</div>
+          <div class="label">投稿準備時間の削減</div>
+        </div>
+        <div class="stat-item">
+          <div class="value">安定</div>
+          <div class="label">品質の担保</div>
+        </div>
+        <div class="stat-item">
+          <div class="value">一括</div>
+          <div class="label">マルチプラットフォーム対応</div>
+        </div>
+        <div class="stat-item">
+          <div class="value">継続</div>
+          <div class="label">少人数での運用が可能</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" id="contact">
+    <div class="container">
+      <h2>導入・お問い合わせ</h2>
+      <p>個人クリエイターから中小企業まで、シームレスなSNS運用環境を提供します。</p>
+      <a href="#" class="btn-white">お問い合わせはこちら</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">© SNS One-Stop Platform. All rights reserved.</div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNS One-Stop Platform - アプリモック</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .page-title {
+    color: #fff;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .page-subtitle {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  /* Phone Frame */
+  .phone-frame {
+    width: 375px;
+    height: 812px;
+    background: #000;
+    border-radius: 55px;
+    padding: 12px;
+    position: relative;
+    box-shadow:
+      0 0 0 2px #1a1a2e,
+      0 0 0 4px #333,
+      0 0 0 6px #1a1a2e,
+      0 30px 60px rgba(0,0,0,0.5),
+      inset 0 0 4px rgba(255,255,255,0.05);
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    background: #fafbfc;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Notch */
+  .notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 30px;
+    background: #000;
+    border-radius: 0 0 20px 20px;
+    z-index: 100;
+  }
+  .notch::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: #1a1a2e;
+    border-radius: 50%;
+    box-shadow: inset 0 0 2px rgba(50,50,200,0.3);
+  }
+
+  /* Status Bar */
+  .status-bar {
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 28px 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a2e;
+    position: relative;
+    z-index: 50;
+  }
+  .status-bar .time { font-size: 14px; font-weight: 700; }
+  .status-bar .icons { display: flex; gap: 5px; align-items: center; font-size: 11px; }
+  .status-bar .icons svg { width: 16px; height: 16px; }
+
+  /* Home Indicator */
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: #000;
+    border-radius: 3px;
+    z-index: 100;
+    opacity: 0.2;
+  }
+
+  /* Screens */
+  .screen {
+    display: none;
+    height: calc(100% - 50px - 70px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.active { display: block; }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: #fff;
+    border-top: 1px solid #eee;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding-top: 8px;
+    border-radius: 0 0 44px 44px;
+    z-index: 90;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    padding: 4px 12px;
+    border: none;
+    background: none;
+    transition: all 0.2s;
+  }
+  .nav-item svg {
+    width: 24px;
+    height: 24px;
+    color: #999;
+    transition: color 0.2s;
+  }
+  .nav-item span {
+    font-size: 10px;
+    color: #999;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-item.active svg { color: #6366f1; }
+  .nav-item.active span { color: #6366f1; font-weight: 600; }
+
+  /* ===== HOME SCREEN ===== */
+  .screen-home {
+    background: linear-gradient(180deg, #6366f1 0%, #818cf8 100%);
+    padding-bottom: 16px;
+  }
+  .home-header {
+    padding: 20px 20px 24px;
+    color: #fff;
+  }
+  .home-greeting {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .home-title {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .home-cards {
+    padding: 0 16px;
+  }
+  .home-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .home-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .home-card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .home-card-icon svg { width: 22px; height: 22px; color: #fff; }
+  .home-card-icon.text { background: linear-gradient(135deg, #6366f1, #818cf8); }
+  .home-card-icon.image { background: linear-gradient(135deg, #ec4899, #f472b6); }
+  .home-card-icon.post { background: linear-gradient(135deg, #14b8a6, #5eead4); }
+  .home-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e1b4b;
+  }
+  .home-card-desc {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+  .home-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: #f0f0ff;
+    color: #6366f1;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .home-card-btn:hover { background: #e0e0ff; }
+
+  /* Stats Row */
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px;
+    margin-bottom: 12px;
+  }
+  .stat-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e1b4b;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: #9ca3af;
+    margin-top: 2px;
+  }
+
+  /* ===== TEXT GENERATION SCREEN ===== */
+  .screen-text {
+    background: #fafbfc;
+  }
+  .screen-header {
+    padding: 16px 20px 12px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e1b4b;
+  }
+  .form-section {
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+  .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1e1b4b;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: #6366f1; }
+  .form-input::placeholder { color: #c4c4c4; }
+  textarea.form-input { resize: none; height: 80px; line-height: 1.5; }
+
+  .tone-selector {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tone-chip {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 12px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .tone-chip.selected {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+  }
+
+  .platform-selector {
+    display: flex;
+    gap: 8px;
+  }
+  .platform-chip {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 12px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 11px;
+    color: #6b7280;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .platform-chip.selected {
+    border-color: #6366f1;
+    background: #f0f0ff;
+    color: #6366f1;
+  }
+
+  .generate-btn {
+    width: calc(100% - 40px);
+    margin: 8px 20px 20px;
+    padding: 14px;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+  }
+  .generate-btn:hover { opacity: 0.9; }
+
+  /* Generated Result */
+  .result-area {
+    display: none;
+    padding: 0 20px 20px;
+  }
+  .result-area.show { display: block; }
+  .result-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    border: 1.5px solid #e5e7eb;
+    margin-bottom: 10px;
+  }
+  .result-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6366f1;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .result-text {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.7;
+  }
+  .hashtags { color: #6366f1; font-weight: 500; }
+  .result-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .result-action-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.2s;
+  }
+  .result-action-btn:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+  }
+  .result-action-btn.primary {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+  }
+
+  /* ===== IMAGE SCREEN ===== */
+  .screen-image { background: #fafbfc; }
+
+  .upload-area {
+    margin: 0 20px 16px;
+    border: 2px dashed #d1d5db;
+    border-radius: 16px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  .upload-area:hover {
+    border-color: #6366f1;
+    background: #f8f8ff;
+  }
+  .upload-area svg {
+    width: 40px;
+    height: 40px;
+    color: #c4c4c4;
+    margin-bottom: 8px;
+  }
+  .upload-area p {
+    font-size: 13px;
+    color: #9ca3af;
+  }
+  .upload-area .upload-label {
+    color: #6366f1;
+    font-weight: 600;
+  }
+
+  /* Image Preview */
+  .image-preview {
+    display: none;
+    margin: 0 20px 16px;
+  }
+  .image-preview.show { display: block; }
+  .preview-img {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #fce7f3, #dbeafe, #d1fae5);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .preview-img .sample-img {
+    font-size: 48px;
+    opacity: 0.6;
+  }
+  .preview-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  /* Adjustment Sliders */
+  .adjust-section {
+    display: none;
+    padding: 0 20px;
+  }
+  .adjust-section.show { display: block; }
+  .adjust-item {
+    margin-bottom: 16px;
+  }
+  .adjust-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .adjust-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+  }
+  .adjust-value {
+    font-size: 12px;
+    color: #6366f1;
+    font-weight: 600;
+  }
+  input[type="range"] {
+    width: 100%;
+    height: 4px;
+    -webkit-appearance: none;
+    background: #e5e7eb;
+    border-radius: 2px;
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #6366f1;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(99,102,241,0.3);
+  }
+
+  /* SNS Size Selector */
+  .sns-size-section {
+    display: none;
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+  .sns-size-section.show { display: block; }
+  .sns-size-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .sns-size-item {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sns-size-item.selected {
+    border-color: #6366f1;
+    background: #f0f0ff;
+  }
+  .sns-size-item .ratio-icon {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #d1d5db;
+    margin: 0 auto 6px;
+    border-radius: 4px;
+  }
+  .sns-size-item.selected .ratio-icon { border-color: #6366f1; }
+  .ratio-1x1 { aspect-ratio: 1/1; width: 28px !important; height: auto !important; }
+  .ratio-4x5 { aspect-ratio: 4/5; width: 24px !important; height: auto !important; }
+  .ratio-9x16 { aspect-ratio: 9/16; width: 18px !important; height: auto !important; }
+  .sns-size-item .size-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #374151;
+  }
+  .sns-size-item .size-platform {
+    font-size: 9px;
+    color: #9ca3af;
+  }
+
+  /* ===== POST SCREEN ===== */
+  .screen-post { background: #fafbfc; }
+
+  .calendar-strip {
+    display: flex;
+    gap: 6px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .calendar-strip::-webkit-scrollbar { display: none; }
+  .cal-day {
+    min-width: 44px;
+    padding: 10px 8px;
+    border-radius: 12px;
+    text-align: center;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .cal-day .day-name { font-size: 10px; color: #9ca3af; font-weight: 500; }
+  .cal-day .day-num { font-size: 16px; font-weight: 700; color: #374151; margin-top: 2px; }
+  .cal-day.today {
+    background: #6366f1;
+    border-color: #6366f1;
+  }
+  .cal-day.today .day-name,
+  .cal-day.today .day-num { color: #fff; }
+  .cal-day.has-post { border-color: #6366f1; }
+  .cal-day.has-post .day-num { color: #6366f1; }
+
+  .post-list {
+    padding: 0 20px;
+  }
+  .post-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9ca3af;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .post-item {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid transparent;
+  }
+  .post-item:hover { border-color: #e5e7eb; }
+  .post-thumb {
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .post-thumb.ig { background: linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7); }
+  .post-thumb.x { background: #0f1419; }
+  .post-thumb.tk { background: #010101; }
+  .post-info { flex: 1; min-width: 0; }
+  .post-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e1b4b;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .post-meta {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+  .post-status {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+    align-self: center;
+  }
+  .post-status.scheduled { background: #fef3c7; color: #d97706; }
+  .post-status.published { background: #d1fae5; color: #059669; }
+  .post-status.draft { background: #f3f4f6; color: #6b7280; }
+
+  .add-post-btn {
+    position: fixed;
+    bottom: 90px;
+    right: calc(50% - 375px/2 + 20px);
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    border: none;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    display: none;
+  }
+
+  /* ===== SETTINGS SCREEN ===== */
+  .screen-settings { background: #fafbfc; }
+
+  .profile-section {
+    text-align: center;
+    padding: 20px 20px 24px;
+  }
+  .profile-avatar {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, #6366f1, #a78bfa);
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .profile-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e1b4b;
+  }
+  .profile-plan {
+    font-size: 12px;
+    color: #6366f1;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .settings-group {
+    padding: 0 20px;
+    margin-bottom: 20px;
+  }
+  .settings-group-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .settings-list {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .settings-item {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .settings-item:last-child { border-bottom: none; }
+  .settings-item:hover { background: #f9fafb; }
+  .settings-item-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .settings-item-icon.purple { background: #ede9fe; }
+  .settings-item-icon.blue { background: #dbeafe; }
+  .settings-item-icon.green { background: #d1fae5; }
+  .settings-item-icon.pink { background: #fce7f3; }
+  .settings-item-icon.gray { background: #f3f4f6; }
+  .settings-item-icon.orange { background: #ffedd5; }
+  .settings-item-label {
+    flex: 1;
+    font-size: 14px;
+    color: #374151;
+  }
+  .settings-item-arrow {
+    color: #d1d5db;
+    font-size: 14px;
+  }
+
+  /* Connected SNS */
+  .connected-sns {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+  .sns-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #374151;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .sns-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  /* Splash / Loading */
+  .splash-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #6366f1 0%, #818cf8 50%, #a78bfa 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    border-radius: 44px;
+    transition: opacity 0.6s ease;
+  }
+  .splash-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .splash-logo {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+  }
+  .splash-logo svg { width: 44px; height: 44px; color: #fff; }
+  .splash-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .splash-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+  }
+  .splash-loader {
+    margin-top: 40px;
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Loading animation for generation */
+  .generating {
+    display: none;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  .generating.show { display: block; }
+  .generating .loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+  .generating p {
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  /* Toast notification */
+  .toast {
+    position: absolute;
+    top: 60px;
+    left: 20px;
+    right: 20px;
+    background: #1e1b4b;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Onboarding modal */
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 400;
+    display: none;
+    align-items: flex-end;
+    border-radius: 44px;
+    overflow: hidden;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-sheet {
+    width: 100%;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    padding: 20px 20px 40px;
+    max-height: 70%;
+    overflow-y: auto;
+  }
+  .modal-handle {
+    width: 36px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e1b4b;
+    margin-bottom: 8px;
+  }
+  .modal-desc {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .modal-btn {
+    width: 100%;
+    padding: 14px;
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Post detail modal */
+  .post-detail-content {
+    padding: 0 4px;
+  }
+  .post-detail-preview {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, #fce7f3, #dbeafe);
+    border-radius: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+  }
+  .post-detail-text {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .post-detail-tags {
+    font-size: 12px;
+    color: #6366f1;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .post-detail-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .post-detail-meta-item {
+    font-size: 11px;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+</style>
+</head>
+<body>
+  <p class="page-title">SNS One-Stop Platform</p>
+  <p class="page-subtitle">スマートフォンアプリ モックアップ</p>
+
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <!-- Notch -->
+      <div class="notch"></div>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <span class="time">12:34</span>
+        <div class="icons">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 9l4-4 4 4"/><path d="M5 5v6"/><path d="M9 9l4-4 4 4"/><path d="M13 5v6"/><path d="M17 9l4-4 4 4" transform="translate(-2,0)"/><path d="M19 5v6"/></svg>
+          <span>100%</span>
+          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="4" y="8" width="14" height="8" rx="1" fill="currentColor"/><rect x="20" y="10" width="2" height="4" rx="0.5"/></svg>
+        </div>
+      </div>
+
+      <!-- Splash Screen -->
+      <div class="splash-overlay" id="splash">
+        <div class="splash-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+        </div>
+        <div class="splash-title">SNS One-Stop</div>
+        <div class="splash-sub">すべてのSNS運用を、ひとつの場所で</div>
+        <div class="splash-loader"></div>
+      </div>
+
+      <!-- Toast -->
+      <div class="toast" id="toast"></div>
+
+      <!-- Modal -->
+      <div class="modal-overlay" id="modal">
+        <div class="modal-sheet" id="modalSheet">
+          <div class="modal-handle"></div>
+          <div id="modalContent"></div>
+        </div>
+      </div>
+
+      <!-- ===== HOME SCREEN ===== -->
+      <div class="screen screen-home active" id="screenHome">
+        <div class="home-header">
+          <div class="home-greeting">おはようございます 👋</div>
+          <div class="home-title">鈴木さん</div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">24</div>
+            <div class="stat-label">今月の投稿</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">予約中</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">5</div>
+            <div class="stat-label">下書き</div>
+          </div>
+        </div>
+
+        <div class="home-cards">
+          <div class="home-card">
+            <div class="home-card-header">
+              <div class="home-card-icon text">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </div>
+              <div class="home-card-title">文章を自動生成</div>
+            </div>
+            <div class="home-card-desc">AIがテーマやキーワードからキャッチコピー、本文、ハッシュタグを自動生成します。</div>
+            <button class="home-card-btn" onclick="switchScreen('text')">
+              作成する →
+            </button>
+          </div>
+
+          <div class="home-card">
+            <div class="home-card-header">
+              <div class="home-card-icon image">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+              <div class="home-card-title">画像を補正</div>
+            </div>
+            <div class="home-card-desc">各SNSの推奨サイズに自動変換し、明るさ・コントラストの補正やフィルターを適用します。</div>
+            <button class="home-card-btn" onclick="switchScreen('image')">
+              アップロード →
+            </button>
+          </div>
+
+          <div class="home-card">
+            <div class="home-card-header">
+              <div class="home-card-icon post">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+              </div>
+              <div class="home-card-title">投稿を管理</div>
+            </div>
+            <div class="home-card-desc">複数SNSへの予約投稿、同時投稿を一元管理。カレンダーで見える化。</div>
+            <button class="home-card-btn" onclick="switchScreen('post')">
+              管理する →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TEXT GENERATION SCREEN ===== -->
+      <div class="screen screen-text" id="screenText">
+        <div class="screen-header">✍️ 文章生成</div>
+
+        <div class="form-section">
+          <label class="form-label">テーマ・キーワード</label>
+          <input type="text" class="form-input" id="inputTheme" placeholder="例: 新作カフェメニュー、春の新商品" />
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">詳細・補足情報</label>
+          <textarea class="form-input" id="inputDetail" placeholder="例: 3月限定の桜ラテを発売。&#10;ターゲットは20-30代女性。"></textarea>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">トーン</label>
+          <div class="tone-selector">
+            <button class="tone-chip selected" onclick="selectTone(this)">カジュアル</button>
+            <button class="tone-chip" onclick="selectTone(this)">フォーマル</button>
+            <button class="tone-chip" onclick="selectTone(this)">ポップ</button>
+            <button class="tone-chip" onclick="selectTone(this)">プロ</button>
+            <button class="tone-chip" onclick="selectTone(this)">エモい</button>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="form-label">投稿先</label>
+          <div class="platform-selector">
+            <button class="platform-chip selected" onclick="selectPlatform(this)">📸 Instagram</button>
+            <button class="platform-chip" onclick="selectPlatform(this)">🐦 X</button>
+            <button class="platform-chip" onclick="selectPlatform(this)">🎵 TikTok</button>
+          </div>
+        </div>
+
+        <button class="generate-btn" onclick="generateText()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          AIで文章を生成
+        </button>
+
+        <div class="generating" id="textGenerating">
+          <div class="loader"></div>
+          <p>AIが文章を生成中...</p>
+        </div>
+
+        <div class="result-area" id="textResult">
+          <div class="result-card">
+            <div class="result-label">💡 キャッチコピー</div>
+            <div class="result-text" style="font-size: 16px; font-weight: 600; color: #1e1b4b;">
+              この春、桜が咲くのはカップの中。🌸
+            </div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">📝 本文</div>
+            <div class="result-text">
+              3月限定✨ 桜ラテが今年も登場！<br><br>
+              ほんのり甘い桜フレーバーと、まろやかなミルクが春の訪れを感じさせてくれます。<br><br>
+              お花見のお供にも、午後のひとときにもぴったり。売り切れ次第終了なのでお早めに🌸
+            </div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">🏷️ ハッシュタグ</div>
+            <div class="result-text hashtags">
+              #桜ラテ #春限定 #カフェ巡り #新メニュー #桜スイーツ #春カフェ #期間限定 #カフェ好き #sakuralatte #springvibes
+            </div>
+          </div>
+          <div class="result-actions">
+            <button class="result-action-btn" onclick="showToast('📋 コピーしました')">
+              📋 コピー
+            </button>
+            <button class="result-action-btn" onclick="generateText()">
+              🔄 再生成
+            </button>
+            <button class="result-action-btn primary" onclick="showPostModal()">
+              📤 投稿へ
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== IMAGE SCREEN ===== -->
+      <div class="screen screen-image" id="screenImage">
+        <div class="screen-header">🖼️ 画像補正</div>
+
+        <div class="upload-area" id="uploadArea" onclick="simulateUpload()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <p><span class="upload-label">タップして画像を選択</span></p>
+          <p style="font-size: 11px; margin-top: 4px;">JPEG, PNG, WebP 対応</p>
+        </div>
+
+        <div class="image-preview" id="imagePreview">
+          <div class="preview-img">
+            <span class="sample-img">🌸☕</span>
+            <span class="preview-badge">1200 × 1200</span>
+          </div>
+        </div>
+
+        <div class="sns-size-section" id="snsSizeSection">
+          <div class="form-label" style="margin-bottom: 10px; padding: 0;">SNS別サイズ</div>
+          <div class="sns-size-grid">
+            <div class="sns-size-item selected" onclick="selectSize(this)">
+              <div class="ratio-icon ratio-1x1"></div>
+              <div class="size-label">1:1</div>
+              <div class="size-platform">Instagram</div>
+            </div>
+            <div class="sns-size-item" onclick="selectSize(this)">
+              <div class="ratio-icon ratio-4x5"></div>
+              <div class="size-label">4:5</div>
+              <div class="size-platform">Instagram</div>
+            </div>
+            <div class="sns-size-item" onclick="selectSize(this)">
+              <div class="ratio-icon ratio-9x16"></div>
+              <div class="size-label">9:16</div>
+              <div class="size-platform">TikTok</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="adjust-section" id="adjustSection">
+          <div class="form-label" style="margin-bottom: 12px;">補正・調整</div>
+          <div class="adjust-item">
+            <div class="adjust-header">
+              <span class="adjust-label">☀️ 明るさ</span>
+              <span class="adjust-value" id="brightnessVal">+10</span>
+            </div>
+            <input type="range" min="-100" max="100" value="10" oninput="updateSlider('brightnessVal', this.value)">
+          </div>
+          <div class="adjust-item">
+            <div class="adjust-header">
+              <span class="adjust-label">🌓 コントラスト</span>
+              <span class="adjust-value" id="contrastVal">+5</span>
+            </div>
+            <input type="range" min="-100" max="100" value="5" oninput="updateSlider('contrastVal', this.value)">
+          </div>
+          <div class="adjust-item">
+            <div class="adjust-header">
+              <span class="adjust-label">🎨 彩度</span>
+              <span class="adjust-value" id="saturationVal">+15</span>
+            </div>
+            <input type="range" min="-100" max="100" value="15" oninput="updateSlider('saturationVal', this.value)">
+          </div>
+          <div class="adjust-item">
+            <div class="adjust-header">
+              <span class="adjust-label">🔆 シャープネス</span>
+              <span class="adjust-value" id="sharpnessVal">+20</span>
+            </div>
+            <input type="range" min="0" max="100" value="20" oninput="updateSlider('sharpnessVal', this.value)">
+          </div>
+        </div>
+
+        <button class="generate-btn" id="imageApplyBtn" style="display: none;" onclick="applyImageCorrection()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          補正を適用
+        </button>
+      </div>
+
+      <!-- ===== POST MANAGEMENT SCREEN ===== -->
+      <div class="screen screen-post" id="screenPost">
+        <div class="screen-header">📅 投稿管理</div>
+
+        <div class="calendar-strip">
+          <div class="cal-day">
+            <div class="day-name">月</div>
+            <div class="day-num">10</div>
+          </div>
+          <div class="cal-day has-post">
+            <div class="day-name">火</div>
+            <div class="day-num">11</div>
+          </div>
+          <div class="cal-day">
+            <div class="day-name">水</div>
+            <div class="day-num">12</div>
+          </div>
+          <div class="cal-day has-post">
+            <div class="day-name">木</div>
+            <div class="day-num">13</div>
+          </div>
+          <div class="cal-day">
+            <div class="day-name">金</div>
+            <div class="day-num">14</div>
+          </div>
+          <div class="cal-day">
+            <div class="day-name">土</div>
+            <div class="day-num">15</div>
+          </div>
+          <div class="cal-day today">
+            <div class="day-name">日</div>
+            <div class="day-num">16</div>
+          </div>
+          <div class="cal-day has-post">
+            <div class="day-name">月</div>
+            <div class="day-num">17</div>
+          </div>
+          <div class="cal-day">
+            <div class="day-name">火</div>
+            <div class="day-num">18</div>
+          </div>
+          <div class="cal-day has-post">
+            <div class="day-name">水</div>
+            <div class="day-num">19</div>
+          </div>
+        </div>
+
+        <div class="post-list">
+          <div class="post-section-title">予約投稿</div>
+          <div class="post-item" onclick="showPostDetail('scheduled1')">
+            <div class="post-thumb ig">📸</div>
+            <div class="post-info">
+              <div class="post-title">春の新メニュー告知</div>
+              <div class="post-meta">Instagram • 2/17 10:00</div>
+            </div>
+            <div class="post-status scheduled">予約中</div>
+          </div>
+          <div class="post-item" onclick="showPostDetail('scheduled2')">
+            <div class="post-thumb x">🐦</div>
+            <div class="post-info">
+              <div class="post-title">桜ラテ発売のお知らせ</div>
+              <div class="post-meta">X (Twitter) • 2/17 12:00</div>
+            </div>
+            <div class="post-status scheduled">予約中</div>
+          </div>
+          <div class="post-item" onclick="showPostDetail('scheduled3')">
+            <div class="post-thumb tk">🎵</div>
+            <div class="post-info">
+              <div class="post-title">ラテアート動画</div>
+              <div class="post-meta">TikTok • 2/19 18:00</div>
+            </div>
+            <div class="post-status scheduled">予約中</div>
+          </div>
+
+          <div class="post-section-title" style="margin-top: 20px;">最近の投稿</div>
+          <div class="post-item" onclick="showPostDetail('published1')">
+            <div class="post-thumb ig">📸</div>
+            <div class="post-info">
+              <div class="post-title">バレンタイン限定チョコ</div>
+              <div class="post-meta">Instagram • 2/13 11:00</div>
+            </div>
+            <div class="post-status published">公開済</div>
+          </div>
+          <div class="post-item" onclick="showPostDetail('published2')">
+            <div class="post-thumb x">🐦</div>
+            <div class="post-info">
+              <div class="post-title">週末イベントのお知らせ</div>
+              <div class="post-meta">X (Twitter) • 2/11 09:00</div>
+            </div>
+            <div class="post-status published">公開済</div>
+          </div>
+
+          <div class="post-section-title" style="margin-top: 20px;">下書き</div>
+          <div class="post-item" onclick="showPostDetail('draft1')">
+            <div class="post-thumb ig" style="opacity: 0.5;">📸</div>
+            <div class="post-info">
+              <div class="post-title">3月キャンペーン（未完成）</div>
+              <div class="post-meta">Instagram • 下書き保存</div>
+            </div>
+            <div class="post-status draft">下書き</div>
+          </div>
+          <div style="height: 20px;"></div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS SCREEN ===== -->
+      <div class="screen screen-settings" id="screenSettings">
+        <div class="screen-header">⚙️ 設定</div>
+
+        <div class="profile-section">
+          <div class="profile-avatar">鈴</div>
+          <div class="profile-name">鈴木さん</div>
+          <div class="profile-plan">Pro プラン</div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">SNS連携</div>
+          <div class="connected-sns" style="padding: 0; margin-bottom: 0;">
+            <div class="sns-badge"><span class="dot"></span> Instagram</div>
+            <div class="sns-badge"><span class="dot"></span> X</div>
+            <div class="sns-badge"><span class="dot" style="background:#f59e0b;"></span> TikTok</div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">アカウント</div>
+          <div class="settings-list">
+            <div class="settings-item" onclick="showToast('👤 プロフィール設定')">
+              <div class="settings-item-icon purple">👤</div>
+              <div class="settings-item-label">プロフィール編集</div>
+              <div class="settings-item-arrow">›</div>
+            </div>
+            <div class="settings-item" onclick="showToast('🔗 SNS連携設定')">
+              <div class="settings-item-icon blue">🔗</div>
+              <div class="settings-item-label">SNSアカウント管理</div>
+              <div class="settings-item-arrow">›</div>
+            </div>
+            <div class="settings-item" onclick="showToast('💳 プラン変更')">
+              <div class="settings-item-icon green">💎</div>
+              <div class="settings-item-label">プラン・お支払い</div>
+              <div class="settings-item-arrow">›</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">アプリ設定</div>
+          <div class="settings-list">
+            <div class="settings-item" onclick="showToast('🔔 通知設定')">
+              <div class="settings-item-icon orange">🔔</div>
+              <div class="settings-item-label">通知設定</div>
+              <div class="settings-item-arrow">›</div>
+            </div>
+            <div class="settings-item" onclick="showToast('🎨 テーマ設定')">
+              <div class="settings-item-icon pink">🎨</div>
+              <div class="settings-item-label">テーマ・表示</div>
+              <div class="settings-item-arrow">›</div>
+            </div>
+            <div class="settings-item" onclick="showToast('❓ ヘルプ')">
+              <div class="settings-item-icon gray">❓</div>
+              <div class="settings-item-label">ヘルプ・フィードバック</div>
+              <div class="settings-item-arrow">›</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; padding: 16px 20px 20px;">
+          <p style="font-size: 11px; color: #d1d5db;">SNS One-Stop Platform v1.0.0</p>
+        </div>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchScreen('home')" id="navHome">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>ホーム</span>
+        </button>
+        <button class="nav-item" onclick="switchScreen('text')" id="navText">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>文章</span>
+        </button>
+        <button class="nav-item" onclick="switchScreen('image')" id="navImage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>画像</span>
+        </button>
+        <button class="nav-item" onclick="switchScreen('post')" id="navPost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <span>投稿</span>
+        </button>
+        <button class="nav-item" onclick="switchScreen('settings')" id="navSettings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>設定</span>
+        </button>
+      </div>
+
+      <!-- Home Indicator -->
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+
+  <p style="color: rgba(255,255,255,0.3); font-size: 11px; margin-top: 16px; text-align: center;">
+    ※ このモックアップはデモ用です。実際のデータ送信は行いません。
+  </p>
+
+<script>
+  // Splash screen
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hidden');
+  }, 2000);
+
+  // Screen switching
+  function switchScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    document.getElementById('screen' + capitalize(name)).classList.add('active');
+    document.getElementById('nav' + capitalize(name)).classList.add('active');
+
+    // Reset scroll position
+    document.getElementById('screen' + capitalize(name)).scrollTop = 0;
+  }
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // Tone selection
+  function selectTone(el) {
+    el.parentElement.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Platform selection
+  function selectPlatform(el) {
+    el.parentElement.querySelectorAll('.platform-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Text generation simulation
+  function generateText() {
+    const resultArea = document.getElementById('textResult');
+    const generating = document.getElementById('textGenerating');
+
+    resultArea.classList.remove('show');
+    generating.classList.add('show');
+
+    setTimeout(() => {
+      generating.classList.remove('show');
+      resultArea.classList.add('show');
+      resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 2500);
+  }
+
+  // Image upload simulation
+  function simulateUpload() {
+    const uploadArea = document.getElementById('uploadArea');
+    const preview = document.getElementById('imagePreview');
+    const snsSize = document.getElementById('snsSizeSection');
+    const adjust = document.getElementById('adjustSection');
+    const applyBtn = document.getElementById('imageApplyBtn');
+
+    uploadArea.style.display = 'none';
+    preview.classList.add('show');
+    snsSize.classList.add('show');
+    adjust.classList.add('show');
+    applyBtn.style.display = 'flex';
+  }
+
+  // Image correction apply
+  function applyImageCorrection() {
+    showToast('✅ 補正を適用しました！');
+  }
+
+  // Slider update
+  function updateSlider(id, value) {
+    const prefix = value >= 0 ? '+' : '';
+    document.getElementById(id).textContent = prefix + value;
+  }
+
+  // Size selection
+  function selectSize(el) {
+    el.parentElement.querySelectorAll('.sns-size-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Toast notification
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  // Modal
+  function showModal(content) {
+    const modal = document.getElementById('modal');
+    document.getElementById('modalContent').innerHTML = content;
+    modal.classList.add('show');
+  }
+
+  function hideModal() {
+    document.getElementById('modal').classList.remove('show');
+  }
+
+  // Close modal on overlay click
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) hideModal();
+  });
+
+  // Post detail modal
+  function showPostDetail(id) {
+    const posts = {
+      scheduled1: {
+        emoji: '🌸☕',
+        title: '春の新メニュー告知',
+        text: '3月限定✨ 桜ラテが今年も登場！\n\nほんのり甘い桜フレーバーと、まろやかなミルクが春の訪れを感じさせてくれます。',
+        tags: '#桜ラテ #春限定 #カフェ巡り #新メニュー',
+        platform: 'Instagram',
+        date: '2/17 10:00',
+        status: '予約中'
+      },
+      scheduled2: {
+        emoji: '🌸',
+        title: '桜ラテ発売のお知らせ',
+        text: '【新商品】桜ラテ、3月1日より発売開始🌸\n\n春だけの特別な一杯をお楽しみください。',
+        tags: '#桜ラテ #新商品 #春',
+        platform: 'X (Twitter)',
+        date: '2/17 12:00',
+        status: '予約中'
+      },
+      scheduled3: {
+        emoji: '🎵☕',
+        title: 'ラテアート動画',
+        text: '桜のラテアートができるまで🌸\n動画で製作過程をお見せします！',
+        tags: '#ラテアート #カフェ #桜',
+        platform: 'TikTok',
+        date: '2/19 18:00',
+        status: '予約中'
+      },
+      published1: {
+        emoji: '🍫💝',
+        title: 'バレンタイン限定チョコ',
+        text: 'バレンタインにぴったり💝\n当店限定のチョコレートケーキ、ご好評いただいています！',
+        tags: '#バレンタイン #チョコレート #限定',
+        platform: 'Instagram',
+        date: '2/13 11:00',
+        status: '公開済'
+      },
+      published2: {
+        emoji: '🎉',
+        title: '週末イベントのお知らせ',
+        text: '今週末は店内でライブイベント開催🎶\nアコースティックライブをお楽しみに！',
+        tags: '#ライブ #イベント #週末',
+        platform: 'X (Twitter)',
+        date: '2/11 09:00',
+        status: '公開済'
+      },
+      draft1: {
+        emoji: '📝',
+        title: '3月キャンペーン（未完成）',
+        text: '3月のキャンペーン内容をここに...',
+        tags: '#キャンペーン',
+        platform: 'Instagram',
+        date: '下書き保存',
+        status: '下書き'
+      }
+    };
+
+    const post = posts[id];
+    if (!post) return;
+
+    const statusClass = post.status === '予約中' ? 'scheduled' : post.status === '公開済' ? 'published' : 'draft';
+
+    showModal(`
+      <div class="post-detail-content">
+        <div class="modal-title">${post.title}</div>
+        <div class="post-detail-meta">
+          <div class="post-detail-meta-item">📱 ${post.platform}</div>
+          <div class="post-detail-meta-item">📅 ${post.date}</div>
+          <div class="post-detail-meta-item"><span class="post-status ${statusClass}" style="margin:0;">${post.status}</span></div>
+        </div>
+        <div class="post-detail-preview">${post.emoji}</div>
+        <div class="post-detail-text">${post.text.replace(/\n/g, '<br>')}</div>
+        <div class="post-detail-tags">${post.tags}</div>
+        <button class="modal-btn" onclick="hideModal(); showToast('✅ 操作完了')">閉じる</button>
+      </div>
+    `);
+  }
+
+  // Post modal from text generation
+  function showPostModal() {
+    showModal(`
+      <div class="modal-title">投稿先を選択</div>
+      <div class="modal-desc">生成した文章をどのSNSに投稿しますか？</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+        <div class="settings-item" style="border: 1.5px solid #e5e7eb; border-radius: 12px; margin: 0;" onclick="hideModal(); showToast('📸 Instagramに予約投稿しました'); switchScreen('post')">
+          <div class="settings-item-icon" style="background: linear-gradient(135deg, #f9ce34, #ee2a7b, #6228d7);">📸</div>
+          <div class="settings-item-label">Instagram</div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item" style="border: 1.5px solid #e5e7eb; border-radius: 12px; margin: 0;" onclick="hideModal(); showToast('🐦 X に予約投稿しました'); switchScreen('post')">
+          <div class="settings-item-icon" style="background: #0f1419; border-radius: 8px;">🐦</div>
+          <div class="settings-item-label">X (Twitter)</div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item" style="border: 1.5px solid #e5e7eb; border-radius: 12px; margin: 0;" onclick="hideModal(); showToast('🎵 TikTokに予約投稿しました'); switchScreen('post')">
+          <div class="settings-item-icon" style="background: #010101; border-radius: 8px;">🎵</div>
+          <div class="settings-item-label">TikTok</div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+      </div>
+      <button class="modal-btn" style="background: #e5e7eb; color: #6b7280;" onclick="hideModal()">キャンセル</button>
+    `);
+  }
+</script>
+</body>
+</html>

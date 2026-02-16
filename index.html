@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNS One-Stop Platform — プロジェクトポータル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0a0f;
+    color: #e4e4e7;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Hero */
+  .hero {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: rgba(99,102,241,0.1);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #818cf8;
+    margin-bottom: 32px;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    background: #818cf8;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 16px;
+    color: #71717a;
+    max-width: 560px;
+    line-height: 1.8;
+  }
+  .hero-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hero-nav a {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .hero-nav .btn-primary {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+  }
+  .hero-nav .btn-primary:hover {
+    box-shadow: 0 6px 30px rgba(99,102,241,0.5);
+    transform: translateY(-1px);
+  }
+  .hero-nav .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    color: #a1a1aa;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .hero-nav .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+
+  /* Section */
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #818cf8;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .section-desc {
+    font-size: 15px;
+    color: #71717a;
+    max-width: 600px;
+    margin-bottom: 48px;
+  }
+
+  /* Card Grid */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .card-grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card:hover {
+    border-color: rgba(99,102,241,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+  .card-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    position: relative;
+    background: #18181b;
+  }
+  .card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .card:hover .card-thumb img {
+    transform: scale(1.03);
+  }
+  .card-thumb .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 12px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .card-thumb .badge.html { background: rgba(99,102,241,0.7); }
+  .card-thumb .badge.md { background: rgba(16,185,129,0.7); }
+  .card-body {
+    padding: 20px 24px 24px;
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 1.7;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #52525b;
+  }
+  .card-footer .tag {
+    padding: 3px 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  /* Divider */
+  .divider {
+    max-width: 1200px;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Doc cards */
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 768px) {
+    .doc-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .doc-grid { grid-template-columns: 1fr; }
+  }
+  .doc-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-card:hover {
+    border-color: rgba(16,185,129,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  }
+  .doc-card .doc-num {
+    font-size: 48px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.03);
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    line-height: 1;
+  }
+  .doc-card .doc-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .doc-card .doc-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .doc-card .doc-subtitle {
+    font-size: 12px;
+    color: #52525b;
+  }
+  .doc-card .doc-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 3px 10px;
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #10b981;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 60px 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: #3f3f46;
+    font-size: 13px;
+  }
+  footer a {
+    color: #71717a;
+    text-decoration: none;
+  }
+  footer a:hover { color: #818cf8; }
+
+  /* Scroll fade-in */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    新規事業企画
+  </div>
+  <h1>
+    <span class="gradient">SNS One-Stop Platform</span><br>
+    プロジェクトポータル
+  </h1>
+  <p>
+    SNS運用のすべてを、ひとつの場所で。<br>
+    文章作成・画像補正・投稿業務を統合するプラットフォームの企画成果物をまとめています。
+  </p>
+  <div class="hero-nav">
+    <a href="#designs" class="btn-primary">デザインを見る</a>
+    <a href="#docs" class="btn-secondary">ドキュメントを読む</a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- LP Designs & Mockup -->
+<section class="section" id="designs">
+  <div class="fade-in">
+    <div class="section-label">Designs</div>
+    <div class="section-title">LPデザイン & アプリモック</div>
+    <div class="section-desc">3パターンのランディングページデザインと、スマートフォンアプリのインタラクティブモックアップです。クリックすると実際のページを体験できます。</div>
+  </div>
+
+  <div class="card-grid fade-in">
+    <a class="card" href="lp-design-1/index.html" target="_blank">
+      <div class="card-thumb">
+        <img src="screenshots/lp-design-1.png" alt="LP Design 1 - 和モダン" loading="lazy">
+        <span class="badge html">HTML</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">LP デザイン A — 和モダン</div>
+        <div class="card-desc">日本の伝統美をモチーフにした落ち着きのあるデザイン。余白と書体の美しさを活かしたランディングページ。</div>
+        <div class="card-footer">
+          <span class="tag">Noto Serif JP</span>
+          <span class="tag">和風</span>
+          <span class="tag">落ち着き</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="lp-design-2/index.html" target="_blank">
+      <div class="card-thumb">
+        <img src="screenshots/lp-design-2.png" alt="LP Design 2 - カワイイ" loading="lazy">
+        <span class="badge html">HTML</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">LP デザイン B — カワイイ</div>
+        <div class="card-desc">パステルカラーと丸みのあるデザインで親しみやすさを表現。若年層・クリエイター向けのポップなLP。</div>
+        <div class="card-footer">
+          <span class="tag">M PLUS Rounded</span>
+          <span class="tag">パステル</span>
+          <span class="tag">ポップ</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="lp-design-3/index.html" target="_blank">
+      <div class="card-thumb">
+        <img src="screenshots/lp-design-3.png" alt="LP Design 3 - ビジネス" loading="lazy">
+        <span class="badge html">HTML</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">LP デザイン C — ビジネス</div>
+        <div class="card-desc">ネイビーを基調とした信頼感のあるプロフェッショナルデザイン。BtoB・企業向けのフォーマルなLP。</div>
+        <div class="card-footer">
+          <span class="tag">Noto Sans JP</span>
+          <span class="tag">ダーク</span>
+          <span class="tag">ビジネス</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="mockup.html" target="_blank">
+      <div class="card-thumb">
+        <img src="screenshots/mockup.png" alt="スマホアプリモック" loading="lazy">
+        <span class="badge html">HTML</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">スマホアプリ モックアップ</div>
+        <div class="card-desc">iPhoneフレーム付きのインタラクティブモック。ホーム・文章生成・画像補正・投稿管理・設定の5画面を操作可能。</div>
+        <div class="card-footer">
+          <span class="tag">インタラクティブ</span>
+          <span class="tag">5画面</span>
+          <span class="tag">スマホUI</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Documents -->
+<section class="section" id="docs">
+  <div class="fade-in">
+    <div class="section-label">Documents</div>
+    <div class="section-title">企画ドキュメント</div>
+    <div class="section-desc">事業企画の各フェーズをまとめたドキュメント群です。GitHub上でMarkdownをプレビューできます。</div>
+  </div>
+
+  <div class="doc-grid fade-in">
+    <a class="doc-card" id="doc-link-01" href="docs/01_executive_summary.md" target="_blank">
+      <span class="doc-num">01</span>
+      <span class="doc-icon">📋</span>
+      <div class="doc-title">エグゼクティブサマリー</div>
+      <div class="doc-subtitle">事業コンセプト・背景・課題・解決策</div>
+      <span class="doc-badge">Markdown</span>
+    </a>
+
+    <a class="doc-card" id="doc-link-02" href="docs/02_product_overview.md" target="_blank">
+      <span class="doc-num">02</span>
+      <span class="doc-icon">🚀</span>
+      <div class="doc-title">プロダクト概要</div>
+      <div class="doc-subtitle">コア機能・システム構成・非機能要件</div>
+      <span class="doc-badge">Markdown</span>
+    </a>
+
+    <a class="doc-card" id="doc-link-03" href="docs/03_market_analysis.md" target="_blank">
+      <span class="doc-num">03</span>
+      <span class="doc-icon">📊</span>
+      <div class="doc-title">市場分析・ターゲット</div>
+      <div class="doc-subtitle">市場動向・ターゲット顧客・競合分析</div>
+      <span class="doc-badge">Markdown</span>
+    </a>
+
+    <a class="doc-card" id="doc-link-04" href="docs/04_business_model.md" target="_blank">
+      <span class="doc-num">04</span>
+      <span class="doc-icon">💰</span>
+      <div class="doc-title">ビジネスモデル</div>
+      <div class="doc-subtitle">収益モデル・KPI・成長戦略</div>
+      <span class="doc-badge">Markdown</span>
+    </a>
+
+    <a class="doc-card" id="doc-link-05" href="docs/05_implementation_roadmap.md" target="_blank">
+      <span class="doc-num">05</span>
+      <span class="doc-icon">🗺️</span>
+      <div class="doc-title">実装ロードマップ</div>
+      <div class="doc-subtitle">技術スタック・フェーズ別計画・体制</div>
+      <span class="doc-badge">Markdown</span>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>SNS One-Stop Platform — 新規事業企画 by 鈴木さん</p>
+  <p style="margin-top: 8px;">
+    <a id="github-link" href="#">GitHub リポジトリ</a>
+  </p>
+</footer>
+
+<script>
+  // Scroll fade-in animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Rewrite doc links to GitHub blob view when on GitHub Pages
+  (function() {
+    const host = window.location.hostname;
+    if (host.endsWith('.github.io')) {
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      const repo = parts[0] || '';
+      const user = host.replace('.github.io', '');
+      const baseUrl = 'https://github.com/' + user + '/' + repo + '/blob/main/';
+
+      document.querySelectorAll('[id^="doc-link-"]').forEach(function(a) {
+        var href = a.getAttribute('href');
+        a.setAttribute('href', baseUrl + href);
+      });
+
+      var ghLink = document.getElementById('github-link');
+      if (ghLink) {
+        ghLink.setAttribute('href', 'https://github.com/' + user + '/' + repo);
+      }
+    }
+  })();
+</script>
+
+</body>
+</html>

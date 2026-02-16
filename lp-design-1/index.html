@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNS One-Stop Platform — 和モダン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-ink: #2c2c2c;
+      --color-paper: #f7f5f0;
+      --color-washi: #e8e4dc;
+      --color-moss: #5c6b5a;
+      --color-sumi: #1a1a1a;
+      --color-accent: #8b7355;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Zen Kaku Gothic New', 'Noto Serif JP', serif;
+      background: var(--color-paper);
+      color: var(--color-ink);
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    
+    /* Header */
+    header {
+      padding: 48px 0 80px;
+      text-align: center;
+      position: relative;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+      opacity: 0.5;
+    }
+    .logo {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: var(--color-accent);
+      margin-bottom: 64px;
+    }
+    .hero h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+      color: var(--color-sumi);
+    }
+    .hero .sub {
+      font-size: 1rem;
+      color: var(--color-moss);
+      font-weight: 400;
+      letter-spacing: 0.1em;
+    }
+    
+    /* Section */
+    section {
+      padding: 80px 0;
+      border-bottom: 1px solid rgba(139, 115, 85, 0.15);
+    }
+    section:last-of-type { border-bottom: none; }
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--color-accent);
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 48px;
+      color: var(--color-sumi);
+    }
+    
+    /* Features */
+    .features { display: grid; gap: 48px; }
+    .feature {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 640px) {
+      .feature { grid-template-columns: 1fr; }
+    }
+    .feature-num {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--color-washi);
+      text-shadow: 0 0 0 var(--color-accent);
+      border-bottom: 2px solid var(--color-accent);
+      padding-bottom: 8px;
+      width: fit-content;
+    }
+    .feature h3 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--color-sumi);
+    }
+    .feature p {
+      font-size: 0.9375rem;
+      color: var(--color-ink);
+      opacity: 0.9;
+    }
+    
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 100px 0 120px;
+    }
+    .cta-section h2 {
+      margin-bottom: 16px;
+    }
+    .cta-section p {
+      margin-bottom: 40px;
+      font-size: 0.9375rem;
+      color: var(--color-moss);
+    }
+    .btn {
+      display: inline-block;
+      padding: 16px 48px;
+      font-family: 'Zen Kaku Gothic New', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      color: var(--color-paper);
+      background: var(--color-sumi);
+      border: 1px solid var(--color-sumi);
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      background: transparent;
+      color: var(--color-sumi);
+    }
+    
+    /* Footer */
+    footer {
+      padding: 32px 0;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">SNS One-Stop Platform</div>
+      <div class="hero">
+        <h1>SNS運用のすべてを、<br>ひとつの場所で。</h1>
+        <p class="sub">文章・画像・投稿を統合し、余白のある運用を。</p>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <p class="section-label">CONCEPT</p>
+      <h2>分散していた作業を、ひとつに。</h2>
+      <p style="max-width: 560px;">
+        文章作成、画像編集、各SNSへの投稿。これらは別々のツールで行われ、切り替えのたびに集中が途切れていました。本プラットフォームは、そのすべてを一元的に扱い、無駄のない運用を実現します。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="section-label">FEATURES</p>
+      <h2>三つの機能</h2>
+      <div class="features">
+        <div class="feature">
+          <span class="feature-num">一</span>
+          <div>
+            <h3>文章の自動生成</h3>
+            <p>AIを活用し、テーマやキーワードからキャッチコピー、本文、ハッシュタグを自動生成。Instagram、TikTok、Xそれぞれの形式に最適化します。</p>
+          </div>
+        </div>
+        <div class="feature">
+          <span class="feature-num">二</span>
+          <div>
+            <h3>画像の補正</h3>
+            <p>アップロードした画像を各SNSの推奨サイズ・形式に最適化。リサイズ、補正、フィルター適用を自動化し、一枚の画像から複数プラットフォーム向けに出力できます。</p>
+          </div>
+        </div>
+        <div class="feature">
+          <span class="feature-num">三</span>
+          <div>
+            <h3>投稿業務の一元化</h3>
+            <p>複数SNSへの予約投稿・同時投稿を一画面から実行。週次・月次のスケジュール管理や、複数アカウントの一括管理が可能です。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="section-label">EFFECT</p>
+      <h2>期待される効果</h2>
+      <ul style="list-style: none; max-width: 480px;">
+        <li style="padding: 12px 0; border-bottom: 1px solid rgba(139,115,85,0.2);">業務効率化 — 投稿準備時間を50〜70%削減</li>
+        <li style="padding: 12px 0; border-bottom: 1px solid rgba(139,115,85,0.2);">品質の安定化 — AIによる一定水準の担保</li>
+        <li style="padding: 12px 0; border-bottom: 1px solid rgba(139,115,85,0.2);">マルチプラットフォーム対応 — 一括管理・投稿</li>
+        <li style="padding: 12px 0;">スケーラビリティ — 少人数でも継続的な運用が可能に</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="container">
+      <h2>余白のある、SNS運用を。</h2>
+      <p>個人クリエイターから中小企業まで、シームレスな運用環境を。</p>
+      <a href="#" class="btn">お問い合わせ</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">© SNS One-Stop Platform</div>
+  </footer>
+</body>
+</html>
